@@ -1,0 +1,38 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+
+# start the gateway
+cd /home/pi/gateblu-forever && /usr/local/bin/npm start &
+
+# If you can't discover your gateway, you can view your
+# Gateblu/Device credentials (UUID and token) from your SD Card 
+# that's mounted from a laptop or desktop
+cp /home/pi/gateblu-forever/meshblu.json /boot/meshblu.json &
+
+# Fadecandy set up
+cd /home/pi && ./fcserver-rpi &
+
+# Launch servo example
+cd /home/pi/meshblu-johnny-five-rpi && /usr/local/bin/node servo-example.js &
+
+# If you wish to use an IP camera
+#cd /home/pi/mjpg-streamer && ./mjpg_streamer -i "./input_uvc.so" -o "./output_http.so -w ./www" &
+
+exit 0
+
