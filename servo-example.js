@@ -1,22 +1,44 @@
-var raspi = require('raspi-io');
-var five = require('johnny-five');
-var meshblu = require('meshblu');
-var meshbluJSON = require('./meshblu.json');
+var raspi = require("raspi-io");
+var five = require("johnny-five");
+var meshblu = require("meshblu");
+var meshbluJSON = require("./meshblu.json");
+var fs = require("fs");
 
-// TODO:
-// if meshbluJSON does not exist, then register a device 
-// and store as meshblu.json
-
-// Creates a Meshblu connection using your
-// device's credentials from your Meshblu.json
 var conn = meshblu.createConnection({
   "uuid": meshbluJSON.uuid,
-   "token": meshbluJSON.token
+  "token": meshbluJSON.token,
+  "server": "meshblu.octoblu.com", // optional - defaults to ws://meshblu.octoblu.com
+  "port": 80  // optional - defaults to 80
+});
+
+conn.on('notReady', function(data) {
+  console.log('UUID FAILED AUTHENTICATION!');
+  console.log('not ready', data);
+
+  // Register a device
+  conn.register({
+    "type": "rpi-servo"
+  }, function (data) {
+    console.log('registered device', data);
+    meshbluJSON.uuid = data.uuid;
+    meshbluJSON.token = data.token;
+    fs.writeFile('meshblu.json', JSON.stringify(meshbluJSON), function(err) {
+      if(err) return;
+    });
+
+  // Login to SkyNet to fire onready event
+  conn.authenticate({
+    "uuid": data.uuid,
+    "token": data.token
+    }, function (data) {
+      console.log('authenticating', data);
+    });
+  });
 });
 
 // Wait for connection to be ready to send/receive messages
 conn.on('ready', function(data) {
-  console.log('data', data);
+  console.log('ready event', data);
 
 // Initialize johnny five board
 // and specify that it's using raspi-io
