@@ -2,7 +2,7 @@
   "name": "meshblu-johnny-five-rpi",
   "version": "1.0.0",
   "description": "",
-  "main": "servo-example.js",
+  "main": "index.js",
   "dependencies": {
     "debug": "^2.1.3",
     "johnny-five": "^0.8.58",
