@@ -3,6 +3,10 @@ var five = require('johnny-five');
 var meshblu = require('meshblu');
 var meshbluJSON = require('./meshblu.json');
 
+// TODO:
+// if meshbluJSON does not exist, then register a device 
+// and store as meshblu.json
+
 // Creates a Meshblu connection using your
 // device's credentials from your Meshblu.json
 var conn = meshblu.createConnection({
