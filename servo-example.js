@@ -4,6 +4,21 @@ var meshblu = require("meshblu");
 var meshbluJSON = require("./meshblu.json");
 var fs = require("fs");
 
+var MESSAGE_SCHEMA = {
+  type: 'object',
+  properties: {
+    servo: {
+      type: 'string',
+      enum: ['PWM0', 'PWM1'],
+      required: true
+    },
+    value: {
+      type: 'number',
+      required: true
+    }
+  }
+};
+
 var conn = meshblu.createConnection({
   "uuid": meshbluJSON.uuid,
   "token": meshbluJSON.token,
@@ -39,6 +54,13 @@ conn.on('notReady', function(data) {
 // Wait for connection to be ready to send/receive messages
 conn.on('ready', function(data) {
   console.log('ready event', data);
+
+  conn.update({
+    "uuid": meshbluJSON.uuid,
+    "token": meshbluJSON.token,
+    "messageSchema": MESSAGE_SCHEMA
+  });
+  
 
 // Initialize johnny five board
 // and specify that it's using raspi-io
