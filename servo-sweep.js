@@ -1,3 +1,4 @@
+// Example based on Johnny-Five: https://github.com/rwaldron/johnny-five/wiki/Servo
 var raspi = require("raspi-io");
 var five = require("johnny-five");
 var meshblu = require("meshblu");
@@ -98,7 +99,10 @@ conn.on('ready', function(data) {
      } else if(payload.servo == "PWM1") {
        servo2.to(payload.value);
      }
-   }); // end Meshblu connection onMessage
+     switch(payload.servo) {
+     }
+
+   ); // end Meshblu connection onMessage
  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady
 
