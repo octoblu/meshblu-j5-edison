@@ -13,7 +13,7 @@ This example provides an easy way to connect your Raspberry Pi to Meshblu with m
 
 <!-- TODO: Describe the installation process -->
 1. Boot up your Raspberry Pi.
-1. On your Raspberry Pi, copy/paste the [init script](./tree/master/scripts) w/in your `rc.local` file, which is located in `/etc/`.
+1. On your Raspberry Pi, copy/paste the [init script](./scripts) w/in your `/etc/rc.local` file.
 
 ## Contributing
 
