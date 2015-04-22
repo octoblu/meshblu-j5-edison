@@ -32,7 +32,7 @@ conn.on('notReady', function(data) {
   console.log('UUID FAILED AUTHENTICATION!');
   console.log('not ready', data);
 
-  // Register a device
+  // Register your device on Meshblu
   conn.register({
     "type": "rpi-servo"
   }, function (data) {
@@ -43,7 +43,7 @@ conn.on('notReady', function(data) {
       if(err) return;
     });
 
-  // Login to SkyNet to fire onready event
+  // Login to Meshblu to fire onready event
   conn.authenticate({
     "uuid": data.uuid,
     "token": data.token
@@ -54,6 +54,7 @@ conn.on('notReady', function(data) {
 });
 
 // Wait for connection to be ready to send/receive messages
+// from/to Meshblu
 conn.on('ready', function(data) {
   console.log('ready event', data);
 
@@ -62,9 +63,9 @@ conn.on('ready', function(data) {
     "token": meshbluJSON.token,
     "messageSchema": MESSAGE_SCHEMA
   });
-  
-// Initialize johnny five board
-// and specify that it's using raspi-io
+
+// Initialize your Johnny-Five board and specify that
+// the board uses the raspi-io library
   var board = new five.Board({
     io: new raspi()
   });
@@ -101,4 +102,3 @@ conn.on('ready', function(data) {
    }); // end Meshblu connection onMessage
  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady
-
