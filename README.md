@@ -1,7 +1,6 @@
-<!-- TODO: add scripts -->
+<!-- TODO: add octoblu init scripts -->
 
 # Meshblu Johnny-Five Raspberry Pi
-<!-- Description -->
 This example provides an easy way to connect your Raspberry Pi to Meshblu with minimal configuration.
 
 ## What you'll need
