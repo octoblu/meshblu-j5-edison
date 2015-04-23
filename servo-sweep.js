@@ -165,7 +165,7 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
-
+    //checks the pin number from 'enum' in peripheral.digital, then sends it high or low
     if(payload.digitalWrite.enable){
       switch(payload.peripheral.digital){
         case "0":
@@ -212,7 +212,7 @@ conn.on('ready', function(data) {
           break;
       }
     }
-
+    //checking if the enable is set for JUST the 'to' function, then sends it values
     if(payload.to.enable && !payload.sweep.enable){
        if(payload.servo == "PWM0"){
          servo.stop();
@@ -221,6 +221,7 @@ conn.on('ready', function(data) {
          servo2.stop();
          servo2.to(payload.to.value);
        }
+    //checking if the enable is set for JUST the 'sweep' function, then sends it values
     } else if(payload.sweep.enable && !payload.to.enable){
       if(payload.servo == "PWM0"){
         servo.sweep({
