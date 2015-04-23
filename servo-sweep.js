@@ -18,6 +18,10 @@ var MESSAGE_SCHEMA = {
     to: {
       type: "object",
       properties: {
+        enable:{
+          type: "boolean",
+          required: false
+        },
         value: {
           type: 'number',
           required: false
@@ -124,7 +128,7 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
-    if(!payload.sweep.enable){
+    if(payload.to.enable){
        if(payload.servo == "PWM0"){
          servo.stop();
          servo.to(payload.to.value);
