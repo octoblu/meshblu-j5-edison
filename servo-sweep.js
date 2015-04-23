@@ -17,10 +17,11 @@ var MESSAGE_SCHEMA = {
     },
     to: {
       type: "object",
-      title: "Send Servo To Angle",
+      title: "Servo To",
       properties: {
         enable:{
           type: "boolean",
+          title: "enable to",
           required: false
         },
         value: {
@@ -31,10 +32,11 @@ var MESSAGE_SCHEMA = {
     },
     sweep: {
       type: 'object',
-      title: "Sweep Between A Range",
+      title: "Servo Sweep",
       properties: {
         enable:{
           type: "boolean",
+          title: "enable sweep",
           required: false
         },
         min: {
