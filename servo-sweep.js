@@ -136,6 +136,6 @@ conn.on('ready', function(data) {
         });
       }
     }
-   ); // end Meshblu connection onMessage
+  }); // end Meshblu connection onMessage
  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady
