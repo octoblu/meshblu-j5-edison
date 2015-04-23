@@ -14,8 +14,8 @@ var MESSAGE_SCHEMA = {
       type: "object",
       properties: {
         digital : {
-          type: "number",
-          enum: [0, 2, 3, 7, 8, 9],
+          type: "string",
+          enum: ["0", "2", "3", "7", "8", "9"],
           required: false
         },
         servo: {
