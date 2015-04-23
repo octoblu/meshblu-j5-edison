@@ -90,8 +90,8 @@ var MESSAGE_SCHEMA = {
 var conn = meshblu.createConnection({
   "uuid": meshbluJSON.uuid,
   "token": meshbluJSON.token,
-  "server": "meshblu.octoblu.com", // optional - defaults to ws://meshblu.octoblu.com
-  "port": 80  // optional - defaults to 80
+  "server": "meshblu.octoblu.com", // optional- defaults to ws://meshblu.octoblu.com
+  "port": 80  // optional- defaults to 80
 });
 
 conn.on("notReady", function(data) {
