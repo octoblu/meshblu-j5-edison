@@ -17,6 +17,7 @@ var MESSAGE_SCHEMA = {
     },
     to: {
       type: "object",
+      title: "Send Servo To Angle",
       properties: {
         enable:{
           type: "boolean",
@@ -30,6 +31,7 @@ var MESSAGE_SCHEMA = {
     },
     sweep: {
       type: 'object',
+      title: "Sweep Between A Range",
       properties: {
         enable:{
           type: "boolean",
