@@ -18,6 +18,27 @@ var MESSAGE_SCHEMA = {
     value: {
       type: 'number',
       required: true
+    },
+    sweep: {
+      type: 'object',
+      properties: {
+        min: {
+          type: "number",
+          required: true
+        },
+        max: {
+          type: "number",
+          required: true
+        },
+        interval: {
+          type: "number",
+          required: true
+        },
+        step: {
+          type: "number",
+          required: true
+        }
+      }
     }
   }
 };
@@ -63,7 +84,7 @@ conn.on('ready', function(data) {
     "token": meshbluJSON.token,
     "messageSchema": MESSAGE_SCHEMA
   });
-  
+
 // Initialize johnny five board
 // and specify that it's using raspi-io
   var board = new five.Board({
@@ -94,15 +115,27 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
-     if(payload.servo == "PWM0"){
-       servo.to(payload.value);
-     } else if(payload.servo == "PWM1") {
-       servo2.to(payload.value);
-     }
-     switch(payload.servo) {
-     }
-
+    if(!payload.sweep.min){
+       if(payload.servo == "PWM0"){
+         servo.to(payload.value);
+       } else if(payload.servo == "PWM1") {
+         servo2.to(payload.value);
+       }
+    } else if(payload.sweep.min){
+      if(payload.servo == "PWM0"){
+        servo.sweep({
+          range: [payload.sweep.min, payload.sweep.max],
+          interval: payload.sweep.interval,
+          step: payload.sweep.step
+        });
+      } else if(payload.servo == "PWM1") {
+        servo2.sweep({
+          range: [payload.sweep.min, payload.sweep.max],
+          interval: payload.sweep.interval,
+          step: payload.sweep.step
+        });
+      }
+    }
    ); // end Meshblu connection onMessage
  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady
-
