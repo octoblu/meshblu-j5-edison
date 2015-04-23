@@ -23,7 +23,7 @@ var MESSAGE_SCHEMA = {
           required: false
         }
       }
-    }
+    },
     sweep: {
       type: 'object',
       properties: {
