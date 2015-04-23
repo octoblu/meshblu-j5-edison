@@ -8,12 +8,32 @@ var fs = require("fs");
 // Specifies how you want your message payload to be passed
 // from Octoblu to your device
 var MESSAGE_SCHEMA = {
-  type: 'object',
+  type: "object",
   properties: {
-    servo: {
-      type: 'string',
-      enum: ['PWM0', 'PWM1'],
-      required: false
+    peripheral: {
+      type: "object",
+      properties: {
+        digital : {
+          type: "number",
+          enum: [0, 2, 3, 7, 8, 9],
+          required: false
+        },
+        servo: {
+          type: "string",
+          enum: ["PWM0", "PWM1"],
+          required: false
+        }
+      }
+    },
+    digitalWrite: {
+      type: "object",
+      title: "Digital Write",
+      properties:  {
+        output: {
+          type: "boolean",
+          required: false
+        }
+      }
     },
     to: {
       type: "object",
@@ -25,13 +45,13 @@ var MESSAGE_SCHEMA = {
           required: false
         },
         value: {
-          type: 'number',
+          type: "number",
           required: false
         }
       }
     },
     sweep: {
-      type: 'object',
+      type: "object",
       title: "Servo Sweep",
       properties: {
         enable:{
@@ -67,7 +87,7 @@ var conn = meshblu.createConnection({
   "port": 80  // optional - defaults to 80
 });
 
-conn.on('notReady', function(data) {
+conn.on("notReady", function(data) {
   console.log('UUID FAILED AUTHENTICATION!');
   console.log('not ready', data);
 
