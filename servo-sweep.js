@@ -32,6 +32,7 @@ var MESSAGE_SCHEMA = {
       properties:  {
         enable: {
           type: "boolean",
+          title: "enable digitalWrite",
           required: false
         },
         state: {
