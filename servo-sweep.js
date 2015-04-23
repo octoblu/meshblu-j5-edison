@@ -128,7 +128,7 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
-    if(payload.to.enable){
+    if(payload.to.enable && !payload.sweep.enable){
        if(payload.servo == "PWM0"){
          servo.stop();
          servo.to(payload.to.value);
@@ -136,7 +136,7 @@ conn.on('ready', function(data) {
          servo2.stop();
          servo2.to(payload.to.value);
        }
-    } else if(payload.sweep.enable){
+    } else if(payload.sweep.enable && !payload.to.enable){
       if(payload.servo == "PWM0"){
         servo.sweep({
           range: [payload.sweep.min, payload.sweep.max],
