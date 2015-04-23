@@ -13,30 +13,35 @@ var MESSAGE_SCHEMA = {
     servo: {
       type: 'string',
       enum: ['PWM0', 'PWM1'],
-      required: true
+      required: false
     },
-    value: {
-      type: 'number',
-      required: true
-    },
+    to: {
+      type: "object",
+      properties: {
+        value: {
+          type: 'number',
+          required: false
+        }
+      }
+    }
     sweep: {
       type: 'object',
       properties: {
         min: {
           type: "number",
-          required: true
+          required: false
         },
         max: {
           type: "number",
-          required: true
+          required: false
         },
         interval: {
           type: "number",
-          required: true
+          required: false
         },
         step: {
           type: "number",
-          required: true
+          required: false
         }
       }
     }
@@ -117,9 +122,9 @@ conn.on('ready', function(data) {
     */
     if(!payload.sweep.min){
        if(payload.servo == "PWM0"){
-         servo.to(payload.value);
+         servo.to(payload.to.value);
        } else if(payload.servo == "PWM1") {
-         servo2.to(payload.value);
+         servo2.to(payload.to.value);
        }
     } else if(payload.sweep.min){
       if(payload.servo == "PWM0"){
