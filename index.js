@@ -214,22 +214,22 @@ conn.on('ready', function(data) {
     }
     //checking if the enable is set for JUST the 'to' function, then sends it values
     if(payload.to.enable && !payload.sweep.enable){
-       if(payload.servo == "PWM0"){
+       if(payload.peripheral.servo == "PWM0"){
          servo.stop();
          servo.to(payload.to.value);
-       } else if(payload.servo == "PWM1") {
+       } else if(payload.peripheral.servo == "PWM1") {
          servo2.stop();
          servo2.to(payload.to.value);
        }
     //checking if the enable is set for JUST the 'sweep' function, then sends it values
     } else if(payload.sweep.enable && !payload.to.enable){
-      if(payload.servo == "PWM0"){
+      if(payload.peripheral.servo == "PWM0"){
         servo.sweep({
           range: [payload.sweep.min, payload.sweep.max],
           interval: payload.sweep.interval,
           step: payload.sweep.step
         });
-      } else if(payload.servo == "PWM1") {
+      } else if(payload.peripheral.servo == "PWM1") {
         servo2.sweep({
           range: [payload.sweep.min, payload.sweep.max],
           interval: payload.sweep.interval,
