@@ -29,8 +29,13 @@ var MESSAGE_SCHEMA = {
       type: "object",
       title: "Digital Write",
       properties:  {
-        output: {
+        enable: {
           type: "boolean",
+          required: false
+        },
+        state: {
+          type: "string",
+          enum: ["high", "low"],
           required: false
         }
       }
@@ -133,6 +138,12 @@ conn.on('ready', function(data) {
   board.on('ready', function() {
     // Initialize servos on pin 1 & 24 (Physical pins 12 and 34, respectively)
     // https://github.com/bryan-m-hughes/raspi-io/wiki
+    var p0 = new five.Led(0);
+    var p2 = new five.Led(2);
+    var p3 = new five.Led(3);
+    var p7 = new five.Led(7);
+    var p8 = new five.Led(8);
+    var p9 = new five.Led(9);
     var servo = new five.Servo(1);
     var servo2 = new five.Servo(24);
 
@@ -152,6 +163,55 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
+
+
+    if(payload.digitalWrite.enable){
+      switch(payload.peripheral.digital){
+        case "0":
+          if(payload.digitalWrite.state == "high"){
+            p0.on();
+          }else{
+            p0.off();
+          }
+          break;
+        case "2":
+          if(payload.digitalWrite.state == "high"){
+            p2.on();
+          }else{
+            p2.off();
+          }
+          break;
+        case "3":
+          if(payload.digitalWrite.state == "high"){
+            p3.on();
+          }else{
+            p3.off();
+          }
+          break;
+        case "7":
+          if(payload.digitalWrite.state == "high"){
+            p7.on();
+          }else{
+            p7.off();
+          }
+          break;
+        case "8":
+          if(payload.digitalWrite.state == "high"){
+            p8.on();
+          }else{
+            p8.off();
+          }
+          break;
+        case "9":
+          if(payload.digitalWrite.state == "high"){
+            p9.on();
+          }else{
+            p9.off();
+          }
+          break;
+      }
+    }
+
     if(payload.to.enable && !payload.sweep.enable){
        if(payload.servo == "PWM0"){
          servo.stop();
