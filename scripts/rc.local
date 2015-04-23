@@ -29,7 +29,6 @@ cp /home/pi/gateblu-forever/meshblu.json /boot/meshblu.json &
 cd /home/pi && ./fcserver-rpi &
 
 # Launch servo example
-cd /home/pi/meshblu-johnny-five-rpi && /usr/local/bin/node servo-example.js &
 cd /home/pi/meshblu-johnny-five-rpi && /usr/local/bin/node index.js &
 
 # If you wish to use an IP camera
