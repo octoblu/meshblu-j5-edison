@@ -15,6 +15,7 @@ var MESSAGE_SCHEMA = {
       properties: {
         digital : {
           type: "string",
+          title: "digital pin (WiringPi pin, not physical pin)",
           enum: ["0", "2", "3", "7", "8", "9"],
           required: false
         },
@@ -163,7 +164,6 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
-
 
     if(payload.digitalWrite.enable){
       switch(payload.peripheral.digital){
