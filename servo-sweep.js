@@ -30,7 +30,7 @@ var MESSAGE_SCHEMA = {
         enable:{
           type: "boolean",
           required: false
-        }
+        },
         min: {
           type: "number",
           required: false
