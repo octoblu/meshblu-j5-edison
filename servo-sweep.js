@@ -126,8 +126,10 @@ conn.on('ready', function(data) {
     */
     if(!payload.sweep.enable){
        if(payload.servo == "PWM0"){
+         servo.stop();
          servo.to(payload.to.value);
        } else if(payload.servo == "PWM1") {
+         servo2.stop();
          servo2.to(payload.to.value);
        }
     } else if(payload.sweep.enable){
