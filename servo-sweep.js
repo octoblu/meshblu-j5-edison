@@ -27,6 +27,10 @@ var MESSAGE_SCHEMA = {
     sweep: {
       type: 'object',
       properties: {
+        enable:{
+          type: "boolean",
+          required: false
+        }
         min: {
           type: "number",
           required: false
@@ -120,13 +124,13 @@ conn.on('ready', function(data) {
         "value": 180
       }
     */
-    if(!payload.sweep.min){
+    if(!payload.sweep.enable){
        if(payload.servo == "PWM0"){
          servo.to(payload.to.value);
        } else if(payload.servo == "PWM1") {
          servo2.to(payload.to.value);
        }
-    } else if(payload.sweep.min){
+    } else if(payload.sweep.enable){
       if(payload.servo == "PWM0"){
         servo.sweep({
           range: [payload.sweep.min, payload.sweep.max],
