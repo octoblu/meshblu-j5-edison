@@ -1,5 +1,5 @@
 // Example based on Johnny-Five: https://github.com/rwaldron/johnny-five/wiki/Servo
-var raspi = require("raspi-io");
+var intel = require("galileo-io");
 var five = require("johnny-five");
 var meshblu = require("meshblu");
 var meshbluJSON = require("./meshblu.json");
@@ -15,13 +15,13 @@ var MESSAGE_SCHEMA = {
       properties: {
         digital : {
           type: "string",
-          title: "digital pin (WiringPi pin, not physical pin)",
-          enum: ["0", "2", "3", "7", "8", "9"],
+          title: "digital pin",
+          enum: ["0","1", "2", "4", "7", "8", "10", "11", "12", "13"],
           required: false
         },
         servo: {
           type: "string",
-          enum: ["PWM0", "PWM1"],
+          enum: ["3", "5", "6", "9"],
           required: false
         }
       }
@@ -100,7 +100,7 @@ conn.on("notReady", function(data) {
 
   // Register a device
   conn.register({
-    "type": "rpi-servo"
+    "type": "intel-io"
   }, function (data) {
     console.log('registered device', data);
     meshbluJSON.uuid = data.uuid;
@@ -130,24 +130,36 @@ conn.on('ready', function(data) {
   });
 
 // Initialize johnny five board
-// and specify that it's using raspi-io
+// and specify that it's using edison-io
   var board = new five.Board({
-    io: new raspi()
+    io: new intel()
   });
 
 // Wait for the board to be ready for message passing
 // board-specific code
   board.on('ready', function() {
-    // Initialize servos on pin 1 & 24 (Physical pins 12 and 34, respectively)
-    // https://github.com/bryan-m-hughes/raspi-io/wiki
+    
     var p0 = new five.Led(0);
+    var p1 = new five.Led(1);
     var p2 = new five.Led(2);
-    var p3 = new five.Led(3);
+    var p4 = new five.Led(4);
     var p7 = new five.Led(7);
     var p8 = new five.Led(8);
-    var p9 = new five.Led(9);
-    var servo = new five.Servo(1);
-    var servo2 = new five.Servo(24);
+    var p10 = new five.Led(10);
+    var p12 = new five.Led(12);
+    var p13 = new five.Led(13);
+    var servo = new five.Servo(3);
+    var servo2 = new five.Servo(5);
+    var servo2 = new five.Servo(6);
+    var servo2 = new five.Servo(9);
+
+    new five.a0("A0");
+    new five.a1("A1");
+    new five.a2("A2");
+    new five.a3("A3");
+    new five.a4("A4");
+    new five.a5("A5");
+
 
     // Handles incoming Octoblu messages
     conn.on('message', function(data) {
@@ -161,7 +173,7 @@ conn.on('ready', function(data) {
        from an Octoblu/Meshblu generic device node
        example:
       {
-        "servo": "PWM0",
+        "servo": "6",
         "value": 180
       }
     */
@@ -175,6 +187,13 @@ conn.on('ready', function(data) {
             p0.off();
           }
           break;
+       case "1":
+          if(payload.digitalWrite.state == "high"){
+            p1.on();
+          }else{
+            p1.off();
+          }
+          break;
         case "2":
           if(payload.digitalWrite.state == "high"){
             p2.on();
@@ -182,11 +201,11 @@ conn.on('ready', function(data) {
             p2.off();
           }
           break;
-        case "3":
+        case "4":
           if(payload.digitalWrite.state == "high"){
-            p3.on();
+            p4.on();
           }else{
-            p3.off();
+            p4.off();
           }
           break;
         case "7":
@@ -203,34 +222,76 @@ conn.on('ready', function(data) {
             p8.off();
           }
           break;
-        case "9":
+        case "10":
           if(payload.digitalWrite.state == "high"){
-            p9.on();
+            p10.on();
           }else{
-            p9.off();
+            p10.off();
+          }
+          break;
+        case "11":
+          if(payload.digitalWrite.state == "high"){
+            p11.on();
+          }else{
+            p11.off();
+          }
+          break;
+
+        case "12":
+          if(payload.digitalWrite.state == "high"){
+            p12.on();
+          }else{
+            p12.off();
+          }
+          break;
+        case "13":
+          if(payload.digitalWrite.state == "high"){
+            p13.on();
+          }else{
+            p13.off();
           }
           break;
       }
     }
+
+    //3,5,6,9
     //checking if the enable is set for JUST the 'to' function, then sends it values
     if(payload.to.enable && !payload.sweep.enable){
-       if(payload.peripheral.servo == "PWM0"){
+       if(payload.peripheral.servo == "3"){
          servo.stop();
          servo.to(payload.to.value);
-       } else if(payload.peripheral.servo == "PWM1") {
+       } else if(payload.peripheral.servo == "5") {
          servo2.stop();
          servo2.to(payload.to.value);
+       } else if(payload.peripheral.servo == "6") {
+         servo3.stop();
+         servo3.to(payload.to.value);
+       } else if(payload.peripheral.servo == "9") {
+         servo4.stop();
+         servo4.to(payload.to.value);
        }
     //checking if the enable is set for JUST the 'sweep' function, then sends it values
     } else if(payload.sweep.enable && !payload.to.enable){
-      if(payload.peripheral.servo == "PWM0"){
+      if(payload.peripheral.servo == "3"){
         servo.sweep({
           range: [payload.sweep.min, payload.sweep.max],
           interval: payload.sweep.interval,
           step: payload.sweep.step
         });
-      } else if(payload.peripheral.servo == "PWM1") {
+      } else if(payload.peripheral.servo == "5") {
         servo2.sweep({
+          range: [payload.sweep.min, payload.sweep.max],
+          interval: payload.sweep.interval,
+          step: payload.sweep.step
+        });
+      }else if(payload.peripheral.servo == "6") {
+        servo3.sweep({
+          range: [payload.sweep.min, payload.sweep.max],
+          interval: payload.sweep.interval,
+          step: payload.sweep.step
+        });
+      }else if(payload.peripheral.servo == "9") {
+        servo4.sweep({
           range: [payload.sweep.min, payload.sweep.max],
           interval: payload.sweep.interval,
           step: payload.sweep.step
@@ -238,5 +299,49 @@ conn.on('ready', function(data) {
       }
     }
   }); // end Meshblu connection onMessage
+
+var v0, v1, v2, v3, v4, v5;
+
+ // Read sensor data
+
+ a0.on("change", function() {
+    v0 = this.value;
+  });
+  a1.on("change", function() {
+    v1 = this.value;
+  });
+  a2.on("change", function() {
+    v2 = this.value;
+  });
+  a3.on("change", function() {
+    v3 = this.value;
+  });
+  a4.on("change", function() {
+    v4 = this.value;
+  });
+  a5.on("change", function() {
+    v5 = this.value;
+  });
+
+ //read
+
+ //send values to octoblu
+
+  setInterval(function(){
+
+    conn.message({
+    "devices": "*",
+    "payload": {
+    "analog0": v0,
+     "analog1": v1,
+      "analog2": v2,
+       "analog3": v3,
+        "analog4": v4,
+         "analog5": v5,
+  }
+});
+        
+  },400);
+
  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady

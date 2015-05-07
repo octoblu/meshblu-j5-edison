@@ -1,1 +1,6 @@
-{"server":"meshblu.octoblu.com","port":80,"uuid":"37bef423-7910-43f1-b9b4-0b7460c1b20e","token":"19b06768b04dab80f7209d741b74303439ba9cdf"}
+{
+	"server":"meshblu.octoblu.com",
+    "port":80,
+    "uuid":"uuid-here",
+    "token":"token-here"
+}

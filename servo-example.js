@@ -1,4 +1,4 @@
-var raspi = require("raspi-io");
+var intel = require("galileo-io");
 var five = require("johnny-five");
 var meshblu = require("meshblu");
 var meshbluJSON = require("./meshblu.json");
@@ -11,7 +11,7 @@ var MESSAGE_SCHEMA = {
   properties: {
     servo: {
       type: 'string',
-      enum: ['PWM0', 'PWM1'],
+      enum: ['3', '5'],
       required: true
     },
     value: {
@@ -34,7 +34,7 @@ conn.on('notReady', function(data) {
 
   // Register your device on Meshblu
   conn.register({
-    "type": "rpi-servo"
+    "type": "intel-servo"
   }, function (data) {
     console.log('registered device', data);
     meshbluJSON.uuid = data.uuid;
@@ -64,19 +64,17 @@ conn.on('ready', function(data) {
     "messageSchema": MESSAGE_SCHEMA
   });
 
-// Initialize your Johnny-Five board and specify that
-// the board uses the raspi-io library
+
   var board = new five.Board({
-    io: new raspi()
+    io: new intel()
   });
 
 // Wait for the board to be ready for message passing
 // board-specific code
   board.on('ready', function() {
-    // Initialize servos on pin 1 & 24 (Physical pins 12 and 34, respectively)
-    // https://github.com/bryan-m-hughes/raspi-io/wiki
-    var servo = new five.Servo(1);
-    var servo2 = new five.Servo(24);
+    
+    var servo = new five.Servo(3);
+    var servo2 = new five.Servo(5);
 
     // Handles incoming Octoblu messages
     conn.on('message', function(data) {
@@ -90,13 +88,13 @@ conn.on('ready', function(data) {
        from an Octoblu/Meshblu generic device node
        example:
       {
-        "servo": "PWM0",
+        "servo": "3",
         "value": 180
       }
     */
-     if(payload.servo == "PWM0"){
+     if(payload.servo == "3"){
        servo.to(payload.value);
-     } else if(payload.servo == "PWM1") {
+     } else if(payload.servo == "5") {
        servo2.to(payload.value);
      }
    }); // end Meshblu connection onMessage
