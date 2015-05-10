@@ -16,7 +16,7 @@ var MESSAGE_SCHEMA = {
         digital : {
           type: "string",
           title: "digital pin",
-          enum: ["0","1", "2", "4", "7", "8", "10", "11", "12", "13"],
+          enum: [ "2", "4", "7", "8", "10", "11", "12", "13"],
           required: false
         },
         servo: {
@@ -139,8 +139,7 @@ conn.on('ready', function(data) {
 // board-specific code
   board.on('ready', function() {
     
-    var p0 = new five.Led(0);
-    var p1 = new five.Led(1);
+    
     var p2 = new five.Led(2);
     var p4 = new five.Led(4);
     var p7 = new five.Led(7);
@@ -180,20 +179,7 @@ conn.on('ready', function(data) {
     //checks the pin number from 'enum' in peripheral.digital, then sends it high or low
     if(payload.digitalWrite.enable){
       switch(payload.peripheral.digital){
-        case "0":
-          if(payload.digitalWrite.state == "high"){
-            p0.on();
-          }else{
-            p0.off();
-          }
-          break;
-       case "1":
-          if(payload.digitalWrite.state == "high"){
-            p1.on();
-          }else{
-            p1.off();
-          }
-          break;
+         
         case "2":
           if(payload.digitalWrite.state == "high"){
             p2.on();
