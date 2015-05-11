@@ -152,12 +152,13 @@ conn.on('ready', function(data) {
     var servo2 = new five.Servo(6);
     var servo2 = new five.Servo(9);
 
-   /* new five.a0("A0");
-    new five.a1("A1");
-    new five.a2("A2");
-    new five.a3("A3");
-    new five.a4("A4");
-    new five.a5("A5"); */
+  var a0 = new five.Sensor("A0");
+var a1 = new five.Sensor("A1");  
+var a2 = new five.Sensor("A2");  
+var a3 = new five.Sensor("A3");  
+var a4 = new five.Sensor("A4");  
+var a5 = new five.Sensor("A5");  
+
 
 
     // Handles incoming Octoblu messages
@@ -289,7 +290,7 @@ conn.on('ready', function(data) {
 var v0, v1, v2, v3, v4, v5;
 
  // Read sensor data
-/*
+
  a0.on("change", function() {
     v0 = this.value;
   });
@@ -327,7 +328,7 @@ var v0, v1, v2, v3, v4, v5;
   }
 });
         
-  },400); */
+  },400); 
 
  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady
