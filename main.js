@@ -119,6 +119,7 @@ conn.on("notReady", function(data) {
   });
 });
 
+
 // Wait for connection to be ready to send/receive messages
 conn.on('ready', function(data) {
   console.log('ready event', data);
@@ -138,8 +139,6 @@ conn.on('ready', function(data) {
 // Wait for the board to be ready for message passing
 // board-specific code
   board.on('ready', function() {
-    
-    
     var p2 = new five.Led(2);
     var p4 = new five.Led(4);
     var p7 = new five.Led(7);
@@ -152,35 +151,19 @@ conn.on('ready', function(data) {
     var servo2 = new five.Servo(6);
     var servo2 = new five.Servo(9);
 
-  var a0 = new five.Sensor("A0");
-var a1 = new five.Sensor("A1");  
-var a2 = new five.Sensor("A2");  
-var a3 = new five.Sensor("A3");  
-var a4 = new five.Sensor("A4");  
-var a5 = new five.Sensor("A5");  
+    var a0 = new five.Sensor("A0");
+    var a1 = new five.Sensor("A1");
+    var a2 = new five.Sensor("A2");
+    var a3 = new five.Sensor("A3");
+    var a4 = new five.Sensor("A4");
+    var a5 = new five.Sensor("A5");
 
-
-
-    // Handles incoming Octoblu messages
-    conn.on('message', function(data) {
-     console.log('message received');
-     console.log(data);
-
-     // Let's extract the payload
-     var payload = data.payload;
-
-    /* Manipulate the servos based on the message passed
-       from an Octoblu/Meshblu generic device node
-       example:
-      {
-        "servo": "6",
-        "value": 180
+    var handleDigitalWrite = function(payload) {
+      if(!payload || !payload.digitalWrite || !payload.digitalWrite.enable) {
+        return;
       }
-    */
-    //checks the pin number from 'enum' in peripheral.digital, then sends it high or low
-    if(payload.digitalWrite.enable){
+
       switch(payload.peripheral.digital){
-         
         case "2":
           if(payload.digitalWrite.state == "high"){
             p2.on();
@@ -223,7 +206,6 @@ var a5 = new five.Sensor("A5");
             p11.off();
           }
           break;
-
         case "12":
           if(payload.digitalWrite.state == "high"){
             p12.on();
@@ -241,57 +223,92 @@ var a5 = new five.Sensor("A5");
       }
     }
 
-    //3,5,6,9
-    //checking if the enable is set for JUST the 'to' function, then sends it values
-    if(payload.to.enable && !payload.sweep.enable){
-       if(payload.peripheral.servo == "3"){
-         servo.stop();
-         servo.to(payload.to.value);
-       } else if(payload.peripheral.servo == "5") {
-         servo2.stop();
-         servo2.to(payload.to.value);
-       } else if(payload.peripheral.servo == "6") {
-         servo3.stop();
-         servo3.to(payload.to.value);
-       } else if(payload.peripheral.servo == "9") {
-         servo4.stop();
-         servo4.to(payload.to.value);
+    var handleTo = function(payload) {
+      if (!payload || !payload.to || !payload.to.enable) {
+        return;
+      }
+      if(!payload.sweep || !payload.sweep.enable){
+         if(payload.peripheral.servo == "3"){
+           servo.stop();
+           servo.to(payload.to.value);
+         } else if(payload.peripheral.servo == "5") {
+           servo2.stop();
+           servo2.to(payload.to.value);
+         } else if(payload.peripheral.servo == "6") {
+           servo3.stop();
+           servo3.to(payload.to.value);
+         } else if(payload.peripheral.servo == "9") {
+           servo4.stop();
+           servo4.to(payload.to.value);
+         }
        }
-    //checking if the enable is set for JUST the 'sweep' function, then sends it values
-    } else if(payload.sweep.enable && !payload.to.enable){
-      if(payload.peripheral.servo == "3"){
-        servo.sweep({
-          range: [payload.sweep.min, payload.sweep.max],
-          interval: payload.sweep.interval,
-          step: payload.sweep.step
-        });
-      } else if(payload.peripheral.servo == "5") {
-        servo2.sweep({
-          range: [payload.sweep.min, payload.sweep.max],
-          interval: payload.sweep.interval,
-          step: payload.sweep.step
-        });
-      }else if(payload.peripheral.servo == "6") {
-        servo3.sweep({
-          range: [payload.sweep.min, payload.sweep.max],
-          interval: payload.sweep.interval,
-          step: payload.sweep.step
-        });
-      }else if(payload.peripheral.servo == "9") {
-        servo4.sweep({
-          range: [payload.sweep.min, payload.sweep.max],
-          interval: payload.sweep.interval,
-          step: payload.sweep.step
-        });
+    }
+
+    var handleSweep = function(payload) {
+      if (!payload || !payload.sweep || !payload.sweep.enable) {
+        return;
+      }
+
+      if(!payload.to.enable){
+        if(payload.peripheral.servo == "3"){
+          servo.sweep({
+            range: [payload.sweep.min, payload.sweep.max],
+            interval: payload.sweep.interval,
+            step: payload.sweep.step
+          });
+        } else if(payload.peripheral.servo == "5") {
+          servo2.sweep({
+            range: [payload.sweep.min, payload.sweep.max],
+            interval: payload.sweep.interval,
+            step: payload.sweep.step
+          });
+        }else if(payload.peripheral.servo == "6") {
+          servo3.sweep({
+            range: [payload.sweep.min, payload.sweep.max],
+            interval: payload.sweep.interval,
+            step: payload.sweep.step
+          });
+        }else if(payload.peripheral.servo == "9") {
+          servo4.sweep({
+            range: [payload.sweep.min, payload.sweep.max],
+            interval: payload.sweep.interval,
+            step: payload.sweep.step
+          });
+        }
       }
     }
-  }); // end Meshblu connection onMessage
 
-var v0, v1, v2, v3, v4, v5;
+    // Handles incoming Octoblu messages
+    conn.on('message', function(data) {
+      console.log('message received', data);
+
+       // Let's extract the payload
+       var payload = data.payload;
+
+      /* Manipulate the servos based on the message passed
+         from an Octoblu/Meshblu generic device node
+         example:
+        {
+          "servo": "6",
+          "value": 180
+        }
+      */
+      //checks the pin number from 'enum' in peripheral.digital, then sends it high or low
+      handleDigitalWrite(payload);
+
+      //3,5,6,9
+      //checking if the enable is set for JUST the 'to' function, then sends it values
+      handleTo(payload);
+
+      //checking if the enable is set for JUST the 'sweep' function, then sends it values
+      handleSweep(payload);
+    }); // end Meshblu connection onMessage
+
+  var v0, v1, v2, v3, v4, v5;
 
  // Read sensor data
 
- a0.on("change", function() {
+  a0.on("change", function() {
     v0 = this.value;
   });
   a1.on("change", function() {
@@ -315,20 +332,19 @@ var v0, v1, v2, v3, v4, v5;
  //send values to octoblu
 
   setInterval(function(){
-
     conn.message({
-    "devices": "*",
-    "payload": {
-    "analog0": v0,
-     "analog1": v1,
-      "analog2": v2,
-       "analog3": v3,
+      "devices": "*",
+      "payload": {
+        "analog0": v0,
+        "analog1": v1,
+        "analog2": v2,
+        "analog3": v3,
         "analog4": v4,
-         "analog5": v5,
-  }
-});
-        
-  },400); 
+        "analog5": v5,
+      }
+    });
 
- }); // end johnny-five board onReady
+  },400);
+
+  }); // end johnny-five board onReady
 }); // end Meshblu connection onReady
