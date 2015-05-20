@@ -13,7 +13,7 @@ https://software.intel.com/en-us/iot/library/edison-getting-started
 ##Install this software
 
 1. Following the instructions from before, get to the shell terminal on your Edison
-2. Type "cd /node_app_slot" and hit enter
+2. Type "cd /~" and hit enter
 3. Type "npm install meshblu-j5-edison" and hit enter
 4. That last step will take awhile, so get some coffee.
 5. After it finishes installing you need to move the contents of /node_modules/meshblu-j5-edison up to /node_app_slot
