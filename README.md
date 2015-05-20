@@ -17,7 +17,7 @@ https://software.intel.com/en-us/iot/library/edison-getting-started
 3. Type "npm install meshblu-j5-edison" and hit enter
 4. That last step will take awhile, so get some coffee.
 5. After it finishes installing you need to move the contents of /node_modules/meshblu-j5-edison up to /node_app_slot
-6. Type "mv /node_modules/meshblu-j5-edison/* /node_app_slot" then hit enter
+6. Type "mv node_modules/meshblu-j5-edison/* /node_app_slot" then hit enter
 7. Type "reboot" and hit enter.
 
 ##Set up In Octoblu
