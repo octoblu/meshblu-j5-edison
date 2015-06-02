@@ -148,8 +148,8 @@ conn.on('ready', function(data) {
     var p13 = new five.Led(13);
     var servo = new five.Servo(3);
     var servo2 = new five.Servo(5);
-    var servo2 = new five.Servo(6);
-    var servo2 = new five.Servo(9);
+    var servo3 = new five.Servo(6);
+    var servo4 = new five.Servo(9);
 
     var a0 = new five.Sensor("A0");
     var a1 = new five.Sensor("A1");
