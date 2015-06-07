@@ -21,7 +21,7 @@ var MESSAGE_SCHEMA = {
         },
         servo: {
           type: "string",
-          enum: [ "6", "9", "base", "left", "right", "motor1", "motor2"],
+          enum: ["3", "5", "6", "9"],
           required: false
         }
       }
@@ -147,12 +147,9 @@ conn.on('ready', function(data) {
     var p12 = new five.Led(12);
     var p13 = new five.Led(13);
     var servo = new five.Servo(3);
-   // var servo2 = new five.Servo(5);
-   // var servo3 = new five.Servo(6);
+    var servo2 = new five.Servo(5);
+    var servo3 = new five.Servo(6);
     var servo4 = new five.Servo(9);
-
-  //  this.pinMode(3, five.Pin.PWM);
-  //  this.pinMode(5, five.Pin.PWM);
 
     var a0 = new five.Sensor("A0");
     var a1 = new five.Sensor("A1");
@@ -160,28 +157,6 @@ conn.on('ready', function(data) {
     var a3 = new five.Sensor("A3");
     var a4 = new five.Sensor("A4");
     var a5 = new five.Sensor("A5");
-
-     var base = new five.Servo({
-    address: 0x40,
-    controller: "PCA9685",
-    pin: 0,
-  });
-
-/*      var left = new five.Servo({
-    address: 0x40,
-    controller: "PCA9685",
-    pin: 3,
-  });
-
-       var right = new five.Servo({
-    address: 0x40,
-    controller: "PCA9685",
-    pin: 4,
-  });
-
-*/
-
-       
 
     var handleDigitalWrite = function(payload) {
       if(!payload || !payload.digitalWrite || !payload.digitalWrite.enable) {
@@ -253,33 +228,18 @@ conn.on('ready', function(data) {
         return;
       }
       if(!payload.sweep || !payload.sweep.enable){
-       /*  if(payload.peripheral.servo == "3"){
+         if(payload.peripheral.servo == "3"){
            servo.stop();
            servo.to(payload.to.value);
          } else if(payload.peripheral.servo == "5") {
            servo2.stop();
            servo2.to(payload.to.value);
-         } else */
-
-         if(payload.peripheral.servo == "6") {
+         } else if(payload.peripheral.servo == "6") {
            servo3.stop();
            servo3.to(payload.to.value);
          } else if(payload.peripheral.servo == "9") {
            servo4.stop();
            servo4.to(payload.to.value);
-         }else if(payload.peripheral.servo == "base") {
-           base.stop();
-           base.to(payload.to.value);
-         }else if(payload.peripheral.servo == "left") {
-           left.stop();
-           left.to(payload.to.value);
-         }else if(payload.peripheral.servo == "right") {
-           right.stop();
-           right.to(payload.to.value);
-         }else if(payload.peripheral.servo == "motor1") {
-           board.analogWrite(3, payload.to.value);
-         }else if(payload.peripheral.servo == "motor2") {
-           board.analogWrite(5, payload.to.value);
          }
        }
     }
@@ -290,7 +250,7 @@ conn.on('ready', function(data) {
       }
 
       if(!payload.to.enable){
-      /*  if(payload.peripheral.servo == "3"){
+        if(payload.peripheral.servo == "3"){
           servo.sweep({
             range: [payload.sweep.min, payload.sweep.max],
             interval: payload.sweep.interval,
@@ -302,9 +262,7 @@ conn.on('ready', function(data) {
             interval: payload.sweep.interval,
             step: payload.sweep.step
           });
-        }else */
-
-        if(payload.peripheral.servo == "6") {
+        }else if(payload.peripheral.servo == "6") {
           servo3.sweep({
             range: [payload.sweep.min, payload.sweep.max],
             interval: payload.sweep.interval,
