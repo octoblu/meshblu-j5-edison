@@ -30,3 +30,4 @@ https://software.intel.com/en-us/iot/library/edison-getting-started
 6. Name it and save it.
 7. Restart your edison.
 8. Now you should be able to start using your edison-io node in the designer!
+# johnny10
